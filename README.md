@@ -362,6 +362,7 @@ public class CategoriesController : ControllerBase
 ```
 
 **HomeController**
+
 This Controller has a lot of coding so I will be explaining certain sections that may need more explanations to it. 
 
 
