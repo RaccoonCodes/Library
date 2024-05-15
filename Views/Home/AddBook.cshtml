@@ -1,0 +1,76 @@
+﻿@model AddBooksModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Book</title>
+    <meta name="viewport" content="width=device-width" />
+    <link href="/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="/Styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container text-white">
+        <h6 class="bg-primary text-white text-center m-2 p-2">Add Book</h6>
+        <form method="post" asp-action="AddBook">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="Book.Title" required>
+            </div>
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" class="form-control" id="author" name="Book.Author" required>
+            </div>
+            <div class="form-group">
+                <label for="edition">Edition</label>
+                <input type="text" class="form-control" id="edition" name="Book.Edition" required>
+            </div>
+            <div class="form-group">
+                <label for="year">Year</label>
+                <input type="number" class="form-control" id="year" name="Book.Year" required>
+            </div>
+            
+            <!-- Dropdown menu for selecting category -->
+            <div class="form-group">
+                <label for="categoryId">Category</label>
+                <select class="form-control" id="categoryId" name="Book.CategoryId" required>
+                    @if (Model.Categories != null)
+                    {
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.CategoryId">@category.Name</option>
+                        }
+                    }
+                    <option value="0">Add New Category</option>
+                </select>
+            </div>
+            <div id="newCategoryInput" class="form-group" style="display: none;">
+                <label for="newCategory">New Category Name</label>
+                <input type="text" class="form-control" id="newCategory" name="NewCategory">
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Add Book</button>
+        </form>
+    </div>
+
+   
+</body>
+</html>
+
+<script>
+    var categorySelect = document.getElementById('categoryId');
+    var newCategoryInput = document.getElementById('newCategoryInput');
+    var newCategoryTextbox = document.getElementById('newCategory');
+
+    categorySelect.addEventListener('change', function () {
+        if (this.value === '0') {
+            newCategoryInput.style.display = 'block';
+            newCategoryTextbox.setAttribute('required', 'required');
+        } else {
+            newCategoryInput.style.display = 'none';
+            newCategoryTextbox.removeAttribute('required');
+        }
+    });
+</script>

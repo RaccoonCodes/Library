@@ -1,0 +1,31 @@
+﻿@model Book
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Confirmation</title>
+    <meta name="viewport" content="width=device-width" />
+    <link href="/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="/Styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container text-white">
+        <h3>Delete Confirmation</h3>
+            <p>Are you sure you want to delete the following book?</p>
+        <div>
+            <p><strong>Title:</strong> @Model.Title</p>
+            <p><strong>Author:</strong> @Model.Author</p>
+            <p><strong>Edition:</strong> @Model.Edition</p>
+            <p><strong>Year:</strong> @Model.Year</p>
+        </div>
+        <form method="post" asp-action="DeleteConfirmed" asp-route-id="@Model.BookId">
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>
