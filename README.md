@@ -2,63 +2,34 @@
 # Table of Contents
 
 1. [Overview](#overview)
-    - [Project Description](#project-description)
-    - [Key Features](#key-features)
-
 2. [Features](#features)
-    - [CRUD Operations](#crud-operations)
-    - [Pagination](#pagination)
-    - [Category Filter](#category-filter)
-    - [REST API](#rest-api)
-    - [Swashbuckle Integration](#swashbuckle-integration)
-
-3. [Development Process](#development-process)
-    - [Technologies Used](#technologies-used)
-        - [ASP.NET Core MVC](#aspnet-core-mvc)
-        - [HTML, CSS, Bootstrap 5, and JavaScript](#html-css-bootstrap-5-and-javascript)
-        - [Entity Framework Core](#entity-framework-core)
-        - [Microsoft SQL Server](#microsoft-sql-server)
-        - [REST API](#rest-api-1)
-        - [Swashbuckle](#swashbuckle)
-
+3. [How it was Developed](#how-it-was-developed)
 4. [Installation](#installation)
-    - [Cloning the Repository](#cloning-the-repository)
-    - [Installing Dependencies](#installing-dependencies)
-    - [Configuring the Database](#configuring-the-database)
-    - [Running the Application](#running-the-application)
-
 5. [Behind the Code](#behind-the-code)
-    - [Models](#models)
-        - [Category Model](#category-model)
-        - [Book Model](#book-model)
-        - [DataContext](#datacontext)
-    - [Repositories](#repositories)
+    - [Model](#model)
+        - [Database Context](#database-context)
+            - [Category](#category)
+            - [Books](#books)
+            - [DataContext](#datacontext)
         - [BookRepo Interface and Implementation](#bookrepo-interface-and-implementation)
-        - [CategoryRepo Interface and Implementation](#categoryrepo-interface-and-implementation)
-    - [BookBinding Model](#bookbinding-model)
+            - [Interface](#interface)
+            - [Implementation](#implementation)
+        - [Category Interface and Implementation](#category-interface-and-implementation)
+            - [Interface](#interface-1)
+            - [Implementation](#implementation-1)
+        - [BookBinding](#bookbinding)
+    - [Controllers](#controllers)
+        - [BooksController](#bookscontroller)
+        - [CategoriesController](#categoriescontroller)
+        - [HomeController](#homecontroller)
+            - [Index](#index)
+            - [AddBook](#addbook)
+            - [Delete and Edit Methods](#delete-and-edit-methods)
+    - [Middleware](#middleware)
+6. [Using Swagger](#using-swagger)
+7. [Conclusion](#conclusion)
+    - [Future Enhancements](#future-enhancements)
 
-6. [Controllers](#controllers)
-    - [BooksController](#bookscontroller)
-    - [CategoriesController](#categoriescontroller)
-    - [HomeController](#homecontroller)
-        - [Index Method](#index-method)
-        - [AddBook Method](#addbook-method)
-        - [Delete and Edit Methods](#delete-and-edit-methods)
-
-7. [Middleware](#middleware)
-    - [TestMiddleware](#testmiddleware)
-
-8. [Using Swagger](#using-swagger)
-    - [Setting Up Swagger](#setting-up-swagger)
-    - [Testing API Endpoints](#testing-api-endpoints)
-
-9. [Future Enhancements](#future-enhancements)
-    - [User Authentication](#user-authentication)
-    - [Advanced Search](#advanced-search)
-    - [Extended Analytics](#extended-analytics)
-    - [UI Improvements](#ui-improvements)
-
-10. [Conclusion](#conclusion)
 
 ## Overview
 
@@ -105,7 +76,7 @@ The following section will describe parts of the code on how they play the role 
 #### Database Context
 There are three Models that connect to each other to build a database set: Category, Books, and DataContext
 
-**Category** 
+#### Category 
 ```csharp
 public class Category
 {
@@ -114,7 +85,7 @@ public class Category
     public IEnumerable<Book>? Books { get; set; }
 }
 ```
-**Books**
+#### Books
 ```csharp
 public class Book
 {
@@ -131,7 +102,7 @@ Respectively, both define key property in which it will need in the database whe
 - In Category: public IEnumerable<Book>? Books { get; set; } 
 - In Books: public Category? Category { get; set; }
 
-**DataContext**
+#### DataContext
 ```csharp
 public class DataContext : DbContext 
 {
@@ -145,7 +116,7 @@ In here we build the database set and its properties for both Books and Categori
 
 #### BookRepo Interface and Implementation
 
-**Interface**
+#### Interface
 ```csharp
 public interface IBookRepo
 {
@@ -159,7 +130,7 @@ public interface IBookRepo
 ```
 This is an interface for Book repository operations for CRUD
 
-**Implementation**
+#### Implementation
 ```csharp
 public class EBookRepo : IBookRepo
 {
@@ -211,7 +182,7 @@ public class EBookRepo : IBookRepo
 The EBookRepo class is injected into Homecontrollers via dependency injection. 
 
 #### Category Interface and Implementation
-**Interface**
+#### Interface
 ```csharp
  public interface ICategoryRepo
  {
@@ -222,7 +193,7 @@ The EBookRepo class is injected into Homecontrollers via dependency injection.
 ```
 The interface defines the category repository. It includes methods for retrieving categories, getting a category by its ID, and applying JSON Patch updates to a category.
 
-**Implementation**
+#### Implementation
 ```csharp
  public class ECategoryRepo : ICategoryRepo
  {
@@ -441,7 +412,7 @@ To start off, These are instances to the Home Class where:
 - "_finalView" and "_addBooksModel" hold the data models for the views to use.
 - "pageSize" is used to determine how many items to display per page in paginated views.
 
-**Index**
+#### Index
 ```csharp
  [HttpGet]
  public async Task<IActionResult> Index(long selectedCategory, int page = 1)
@@ -500,7 +471,7 @@ if (responseCategory.IsSuccessStatusCode && responseBookApi.IsSuccessStatusCode)
 As mentioned before, after sucessful status code for both api connection, it starts to read into JSON strings and store them, respectively, in jsonCatValues and jsonBookValues.
 Then, it gets deserialized into list of objects categories and books. Pagination is also prepared and set for the view. Finally, it gets stored and prepared in an instance of FinalView and populated with the list of categories, paginated books, the selected category, and pagination information for the view to render.
 
-**AddBook**
+#### AddBook
 ```csharp
 public async Task<IActionResult> AddBook()
 {
@@ -548,7 +519,7 @@ public async Task<IActionResult> AddBook(AddBooksModel addBooksModel)
 ```
 This part is the submition for addBooks. If the new categories is selected, then a new object for category is created and added to the Book object as well. After the http client is prepared and serialized, it gets sent and await response. if sucessful, then redirects to the homepage (which in Index in this case). otherwise display the error code. 
 
-**Delete and edit Methods**
+#### Delete and edit Methods
 ```csharp
 [HttpGet]public async Task<IActionResult> DeleteBook(long id){// [Omitted for brevity]}
 [HttpPost]public async Task<IActionResult> DeleteConfirmed(long id){// [Omitted for brevity]}
@@ -609,7 +580,7 @@ Documentation is possible with Swagger, However I did not include them.
 ### Conclusion
 this project implements a comprehensive virtual bookshelf where users can store and manage their own book collections. The application leverages ASP.NET Core MVC for robust backend operations, integrating Entity Framework Core for database management and Microsoft SQL Server for data storage. The frontend utilizes HTML, CSS, Bootstrap 5, and JavaScript, ensuring a responsive and user-friendly interface.
 
-**Future Enhancements**
+#### Future Enhancements
 Potential improvements and additional features could include:
 
 User Authentication: Adding user roles and permissions to enhance security and provide "sharing bookself" style.
