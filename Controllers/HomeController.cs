@@ -13,8 +13,6 @@ namespace Library.Controllers
         private AddBooksModel? _addBooksModel;
         public const int pageSize = 5;
 
-        //Finish clean up,overview everything and document
-
         public HomeController(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
 
         [HttpGet]
