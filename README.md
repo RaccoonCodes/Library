@@ -1,4 +1,64 @@
 # Library
+# Table of Contents
+
+1. [Overview](#overview)
+    - [Project Description](#project-description)
+    - [Key Features](#key-features)
+
+2. [Features](#features)
+    - [CRUD Operations](#crud-operations)
+    - [Pagination](#pagination)
+    - [Category Filter](#category-filter)
+    - [REST API](#rest-api)
+    - [Swashbuckle Integration](#swashbuckle-integration)
+
+3. [Development Process](#development-process)
+    - [Technologies Used](#technologies-used)
+        - [ASP.NET Core MVC](#aspnet-core-mvc)
+        - [HTML, CSS, Bootstrap 5, and JavaScript](#html-css-bootstrap-5-and-javascript)
+        - [Entity Framework Core](#entity-framework-core)
+        - [Microsoft SQL Server](#microsoft-sql-server)
+        - [REST API](#rest-api-1)
+        - [Swashbuckle](#swashbuckle)
+
+4. [Installation](#installation)
+    - [Cloning the Repository](#cloning-the-repository)
+    - [Installing Dependencies](#installing-dependencies)
+    - [Configuring the Database](#configuring-the-database)
+    - [Running the Application](#running-the-application)
+
+5. [Behind the Code](#behind-the-code)
+    - [Models](#models)
+        - [Category Model](#category-model)
+        - [Book Model](#book-model)
+        - [DataContext](#datacontext)
+    - [Repositories](#repositories)
+        - [BookRepo Interface and Implementation](#bookrepo-interface-and-implementation)
+        - [CategoryRepo Interface and Implementation](#categoryrepo-interface-and-implementation)
+    - [BookBinding Model](#bookbinding-model)
+
+6. [Controllers](#controllers)
+    - [BooksController](#bookscontroller)
+    - [CategoriesController](#categoriescontroller)
+    - [HomeController](#homecontroller)
+        - [Index Method](#index-method)
+        - [AddBook Method](#addbook-method)
+        - [Delete and Edit Methods](#delete-and-edit-methods)
+
+7. [Middleware](#middleware)
+    - [TestMiddleware](#testmiddleware)
+
+8. [Using Swagger](#using-swagger)
+    - [Setting Up Swagger](#setting-up-swagger)
+    - [Testing API Endpoints](#testing-api-endpoints)
+
+9. [Future Enhancements](#future-enhancements)
+    - [User Authentication](#user-authentication)
+    - [Advanced Search](#advanced-search)
+    - [Extended Analytics](#extended-analytics)
+    - [UI Improvements](#ui-improvements)
+
+10. [Conclusion](#conclusion)
 
 ## Overview
 
@@ -547,7 +607,15 @@ To use the swagger UI, after running the program, search:
 Documentation is possible with Swagger, However I did not include them.
 
 ### Conclusion
+this project implements a comprehensive virtual bookshelf where users can store and manage their own book collections. The application leverages ASP.NET Core MVC for robust backend operations, integrating Entity Framework Core for database management and Microsoft SQL Server for data storage. The frontend utilizes HTML, CSS, Bootstrap 5, and JavaScript, ensuring a responsive and user-friendly interface.
 
+**Future Enhancements**
+Potential improvements and additional features could include:
+
+User Authentication: Adding user roles and permissions to enhance security and provide "sharing bookself" style.
+Advanced Search: Implementing more sophisticated search capabilities.
+Analytics: Providing more detailed statistics and insights about the user's book collection.
+UI Improvements: Enhancing the user interface for better usability and aesthetics.
 
 **README IN PROGRESS**
 
