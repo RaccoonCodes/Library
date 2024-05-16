@@ -497,6 +497,56 @@ This part is the submition for addBooks. If the new categories is selected, then
 ```
 Similar to AddBooks Methods, each method does Delete and edit operations respectively. After each method finishes their operations, it redirects the user to the home page. 
 
+### MiddleWare
+```csharp
+ public class TestMiddleware
+ {
+     private readonly RequestDelegate requestDelegate;
+
+     public TestMiddleware(RequestDelegate requestDelegate) 
+         => this.requestDelegate = requestDelegate;
+
+     public async Task Invoke(HttpContext context, DataContext dataContext)
+     {
+         if(context.Request.Path == "/test")
+         {
+             await context.Response.WriteAsync($"There are {dataContext.Books.Count()} Books\n");
+             await context.Response.WriteAsync($"There are {dataContext.Categories.Count()} categories\n");
+            
+         }
+         else
+         {
+             //will let the next middleware handle the request
+             await requestDelegate(context);
+         }
+     }
+ }
+```
+
+A Middleware is created to see simple information on total book and categories count. To see this, search: 
+
+"http://localhost:5000/test" 
+
+after running the program and it will display the information mentioned prior.
+
+### Using Swagger
+To test out the API Connections and see if they are communicating to the application properly, I used swagger. On Program.cs Ive added: 
+
+```csharp
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Library");
+});
+```
+
+To use the swagger UI, after running the program, search: 
+
+"http://localhost:5000/swagger/index.html" 
+
+Documentation is possible with Swagger, However I did not include them.
+
+### Conclusion
 
 
 **README IN PROGRESS**
