@@ -37,6 +37,9 @@ This Project is about users storing their own books into this virtual bookself. 
 
 This web project focuses heavily on backend work.
 
+**Note**: The books that is currently in the bookself are my own books that I have. Feel free to look them up! They are great books for various different subjects that I have 
+been studying for and practicing.
+
 ## Features
 1) CRUD Operations: You can Add, edit, or delete Books from your Library.
 2) Pagination: To keep the webpage clean and avoid overflowing with information.
