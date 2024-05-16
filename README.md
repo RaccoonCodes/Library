@@ -246,7 +246,7 @@ The safest way to prevent over-binding is to create separate data model classes 
 ### Controllers
 The following will describe the REST APIs and HomeController.
 
-**BooksController**
+#### BooksController
 The BooksController provides various endpoints to manage books using interface BookRepo via dependency Injection. Its function is described in Implementation of BookRepo section
 ```csharp
 [ApiController]
@@ -336,7 +336,7 @@ public class BooksController : ControllerBase
 }
 ```
 
-**CategoriesController**
+#### CategoriesController
 This API provides endpoints for managing categories using the Interface CategoryRepo via Dependency Injection
 ```csharp
 [ApiController]
@@ -361,9 +361,142 @@ public class CategoriesController : ControllerBase
 }
 ```
 
-**HomeController**
+#### HomeController
+This Controller has a lot of coding so I will provide short explanation and show parts of the code in the homecontroller instead of displaying the whole code.
 
-This Controller has a lot of coding so I will be explaining certain sections that may need more explanations to it. 
+**Instances**
+```csharp
+ public class HomeController : Controller {
+private readonly IHttpClientFactory _httpClientFactory;
+private FinalView? _finalView;
+private AddBooksModel? _addBooksModel;
+public const int pageSize = 5;
+
+// Other Methods
+
+}
+```
+To start off, These are instances to the Home Class where: 
+- "_httpClientFactory" is used to create HTTP clients for making API requests.
+- "_finalView" and "_addBooksModel" hold the data models for the views to use.
+- "pageSize" is used to determine how many items to display per page in paginated views.
+
+**Index**
+```csharp
+ [HttpGet]
+ public async Task<IActionResult> Index(long selectedCategory, int page = 1)
+ {
+var httpClient = _httpClientFactory.CreateClient();
+
+//Category API
+string catApi = "http://localhost:5000/api/categories";
+
+//Book API
+string bookApi = selectedCategory != 0 ?
+   $"http://localhost:5000/api/Books/GetBooks/{selectedCategory}" :
+   "http://localhost:5000/api/Books";
+
+HttpResponseMessage responseCategory = await httpClient.GetAsync(catApi);
+HttpResponseMessage responseBookApi = await httpClient.GetAsync(bookApi);
+
+if (responseCategory.IsSuccessStatusCode && responseBookApi.IsSuccessStatusCode){
+// [Omitted for brevity]
+}
+ else
+     return Content($"Error {responseCategory.StatusCode}");
+}
+```
+In this segment, both API, books and Category, are used to retrive info for the view to render. The HttpResponseMesssage, is used to check if the connection can process the request and return a status code. If the the code is sucesssful, then it proceeds to do the necessary operations, otherwise it will display the error code when rendering the view.
+
+```csharp
+if (responseCategory.IsSuccessStatusCode && responseBookApi.IsSuccessStatusCode)
+{
+    string jsonCatValues = await responseCategory.Content.ReadAsStringAsync();
+    List<Category>? categories = JsonConvert.DeserializeObject<List<Category>>(jsonCatValues);
+
+    string jsonBookValues = await responseBookApi.Content.ReadAsStringAsync();
+    List<Book>? books = JsonConvert.DeserializeObject<List<Book>>(jsonBookValues);
+
+    //Paginations
+    int totalItems = books.Count;          
+    int skip = (page - 1) * pageSize;
+    List<Book> pagedBooks = books.Skip(skip).Take(pageSize).ToList();
+
+    _finalView = new FinalView
+    {
+        Categories = categories,
+        Books = pagedBooks,
+        SelectedCategory = selectedCategory,
+        PagingInfo = new PagingInfo
+        {
+            TotalItems = totalItems,
+            ItemPerPage = pageSize,
+            CurrentPage = page
+        }
+    };
+    return View(_finalView);
+}
+```
+As mentioned before, after sucessful status code for both api connection, it starts to read into JSON strings and store them, respectively, in jsonCatValues and jsonBookValues.
+Then, it gets deserialized into list of objects categories and books. Pagination is also prepared and set for the view. Finally, it gets stored and prepared in an instance of FinalView and populated with the list of categories, paginated books, the selected category, and pagination information for the view to render.
+
+**AddBook**
+```csharp
+public async Task<IActionResult> AddBook()
+{
+  // [Omitted for brevity]
+    if (responseCategory.IsSuccessStatusCode)
+    {
+        string jsonCatValues = await responseCategory.Content.ReadAsStringAsync();
+        List<Category>? categories = JsonConvert.DeserializeObject<List<Category>>(jsonCatValues);
+        _addBooksModel = new AddBooksModel
+        {
+            Categories = categories
+        };
+    }
+    return View(_addBooksModel);
+}
+```
+Similiar to the previous code, a response is created. If it is sucessful, then it begins to do its operation and store it in an instance of addBooksModel. This part prepares for the selection for a dropdown menu so it can display your available categories and an option to add new categories.
+
+```csharp
+[HttpPost]
+public async Task<IActionResult> AddBook(AddBooksModel addBooksModel)
+{
+
+    if (addBooksModel.Book.CategoryId == 0 && addBooksModel.NewCategory !=null)
+    {
+        Category c1 = new Category { Name = addBooksModel.NewCategory };
+        addBooksModel.Book.Category = c1;
+    }
+
+
+    var httpClient = _httpClientFactory.CreateClient();
+    string bookApi = "http://localhost:5000/api/Books";
+    var content = new StringContent(JsonConvert.SerializeObject(addBooksModel.Book),Encoding.UTF8, "application/json");
+    HttpResponseMessage response = await httpClient.PutAsync(bookApi, content);
+
+    if (response.IsSuccessStatusCode)
+    {
+        return RedirectToAction(nameof(Index));
+    }
+    else
+    {
+        return Content($"Error {response.StatusCode}");
+    }
+}
+```
+This part is the submition for addBooks. If the new categories is selected, then a new object for category is created and added to the Book object as well. After the http client is prepared and serialized, it gets sent and await response. if sucessful, then redirects to the homepage (which in Index in this case). otherwise display the error code. 
+
+**Delete and edit Methods**
+```csharp
+[HttpGet]public async Task<IActionResult> DeleteBook(long id){// [Omitted for brevity]}
+[HttpPost]public async Task<IActionResult> DeleteConfirmed(long id){// [Omitted for brevity]}
+[HttpGet]public async Task<IActionResult> EditBook(long id){// [Omitted for brevity]}
+[HttpPost]public async Task<IActionResult> EditBook(Book book){// [Omitted for brevity]}
+```
+Similar to AddBooks Methods, each method does Delete and edit operations respectively. After each method finishes their operations, it redirects the user to the home page. 
+
 
 
 **README IN PROGRESS**
