@@ -59,13 +59,13 @@ been studying for and practicing.
 2) Open your Visual Studio and Download any necessary Nuget Packages or Download them via Command Terminal using the following:
    - **Installing Entity Framework and SQL:**
      
-     "dotnet add package Microsoft.EntityFrameworkCore.Design --version 6.0.0"
+     `dotnet add package Microsoft.EntityFrameworkCore.Design --version 6.0.0`
      
-     "dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 6.0.0"
+     `dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 6.0.0`
      
    -  **Installing Swashbuckle:**
      
-      "dotnet add package Swashbuckle.AspNetCore --version 6.2.3"
+      `dotnet add package Swashbuckle.AspNetCore --version 6.2.3`
       
 3) Connection String in appsettings.json is set to local machine, you may change the connection string to your own database.
 4) As mentioned before, there is seeded Data to begin with and I personally added some of my own personal books. If update is needed use the follwoing command on Terminal: "dotnet ef database update"
@@ -102,8 +102,8 @@ public class Book
 }
 ```
 Respectively, both define key property in which it will need in the database when new objects, or books, are created and stored.  There are also navigation properties that can be used to querry specific categories, however, I wanted to demontrate the use of using two API for this function. The Navigation Properties are : 
-- In Category: public IEnumerable<Book>? Books { get; set; } 
-- In Books: public Category? Category { get; set; }
+- In Category: `public IEnumerable<Book>? Books { get; set; } `
+- In Books: `public Category? Category { get; set; }`
 
 #### DataContext
 ```csharp
@@ -175,12 +175,12 @@ public class EBookRepo : IBookRepo
     }
 }
 ```
-- GetBookByIdAsync: Retrieves a book by its ID.
-- GetAllBooksAsync: Retrieves all books, ordered by title, author, edition, and year.
-- GetBooksByCategoryIdAsync: Retrieves books by a specific category ID, ordered by title, author, edition, and year.
-- AddBookAsync: Adds a new book to the database and saves the changes.
-- UpdateBookAsync: Updates an existing book in the database and saves the changes.
-- DeleteBookAsync: Deletes a book by its ID from the database and saves the changes.
+- `GetBookByIdAsync`: Retrieves a book by its ID.
+- `GetAllBooksAsync`: Retrieves all books, ordered by title, author, edition, and year.
+- `GetBooksByCategoryIdAsync`: Retrieves books by a specific category ID, ordered by title, author, edition, and year.
+- `AddBookAsync`: Adds a new book to the database and saves the changes.
+- `UpdateBookAsync`: Updates an existing book in the database and saves the changes.
+- `DeleteBookAsync`: Deletes a book by its ID from the database and saves the changes.
 
 The EBookRepo class is injected into Homecontrollers via dependency injection. 
 
@@ -239,10 +239,10 @@ The interface defines the category repository. It includes methods for retrievin
      }
  }
 ```
-- GetAllCategories: Retrieves all categories.
-- GetByIdAsync: Retrieves a category by its ID, including its related books. To avoid 
+- `GetAllCategories`: Retrieves all categories.
+- `GetByIdAsync`: Retrieves a category by its ID, including its related books. To avoid 
  circular references, it sets the Category property of each book to null.
-- PatchChangesAsync: Applies a JSON Patch document to a category and saves the changes.
+- `PatchChangesAsync`: Applies a JSON Patch document to a category and saves the changes.
 
 #### BookBinding
 ```csharp
@@ -576,7 +576,7 @@ app.UseSwaggerUI(c =>
 
 To use the swagger UI, after running the program, search: 
 
-"http://localhost:5000/swagger/index.html" 
+`http://localhost:5000/swagger/index.html` 
 
 Documentation is possible with Swagger, However I did not include them.
 
@@ -591,7 +591,7 @@ Advanced Search: Implementing more sophisticated search capabilities.
 Analytics: Providing more detailed statistics and insights about the user's book collection.
 UI Improvements: Enhancing the user interface for better usability and aesthetics.
 
-**README IN PROGRESS**
+
 
 
 
